@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Login and Text-to-Speech</title>
+
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background: rgb(2, 0, 36);
+        background: linear-gradient(90deg, rgba(2, 0, 36, 1) 0%, rgba(0, 212, 255, 1) 100%);
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+      
+      .login-container {
+        max-width: 300px;
+        padding: 20px;
+        background-color: #fff;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+      
+      .login-container h2 {
+        text-align: center;
+        color: #333;
+      }
+      
+      .form-group {
+        margin-bottom: 15px;
+        width: 300px;
+      }
+      
+      .form-group label {
+        display: block;
+        font-weight: bold;
+      }
+      
+      .form-group input {
+        width: 85%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+      }
+      
+      .gender input {
+        width: 85%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+      }
+      
+      .login-button {
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        width: 100%;
+        font-size: 16px;
+        transition: background-color 0.2s;
+      }
+      
+      .login-button:hover {
+        background-color: #0056b3;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="login-container">
+      <form action="/text-to-speech" method="POST" enctype="multipart/form-data">
+        <h2>Text-to-Speech</h2>
+        <div class="form-group">
+          <label for="rate">Enter your text file:</label>
+          <input type="file" name="text_file" accept=".txt" />
+        </div>
+        <br />
+        <div class="form-group gender">
+          <label for="rate">Voice:</label>
+          <select name="gender">
+            <option value="female">Female</option>
+            <option value="male">Male</option>
+          </select>
+        </div>
+        <br />
+        <div class="form-group">
+          <label for="rate">Speech rate (e.g., 200 for normal):</label>
+          <input type="number" name="rate" id="rate" placeholder="200" min="0" />
+          <br />
+        </div>
+        <br />
+        <button type="submit" class="login-button">Generate Speech</button>
+      </form>
+    </div>
+    <script>
+      function generateSpeech() {
+        const form = document.querySelector("form[action='/text-to-speech']")
+        const text = form.elements.text.value
+        const textFile = form.elements.text_file.files[0]
+        const gender = form.elements.gender.value
+        const rate = form.elements.rate.value
+      
+        if (!text && !textFile) {
+          alert('Please provide text or upload a text file for speech synthesis.')
+          return
+        }
+      
+        // Create a FormData object to send the data to the server
+        const formData = new FormData(form)
+      
+        // Send a POST request with FormData for file upload
+        fetch('/text-to-speech', {
+          method: 'POST',
+          body: formData
+        })
+          .then((response) => {
+            // Handle the response here
+          })
+          .catch((error) => {
+            console.error('Error:', error)
+          })
+      }
+    </script>
+  </body>
+</html>
